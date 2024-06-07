@@ -190,7 +190,7 @@
     </reverseProxies>
     <propertySets/>
     <systemProperties/>
-    <urlBase>http://127.0.0.1:8082</urlBase>
+    <urlBase>http://10.2.2.44:8082</urlBase>
     <repoLayouts>
         <repoLayout>
             <name>maven-2-default</name>
