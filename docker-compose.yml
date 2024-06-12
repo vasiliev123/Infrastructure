@@ -9,6 +9,9 @@ services:
       - CASC_JENKINS_CONFIG=/usr/share/jenkins/ref/jenkins.yaml
     volumes:
       - ./jenkins_controller/jenkins.yaml:/usr/share/jenkins/ref/jenkins.yaml
+      - ./jenkins_controller/jobs/backend.groovy:/usr/share/jenkins/ref/jobs/backend.groovy
+      - ./jenkins_controller/jobs/frontend.groovy:/usr/share/jenkins/ref/jobs/frontend.groovy
+      - ./jenkins_controller/jobs/app_of_apps.groovy:/usr/share/jenkins/ref/jobs/app_of_apps.groovy
     ports:
       - "50000:50000"
       - "8880:8080"
@@ -34,6 +37,28 @@ services:
     container_name: sonarqube
     ports:
       - "9000:9000"
+    restart: always
+
+  selenium-hub:
+    depends_on:
+      - jenkins
+    image: selenium/hub
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    restart: always
+
+  firefox:
+    image: selenium/node-firefox
+    container_name: firefox
+    depends_on:
+      - selenium-hub
+    environment:
+    - SE_EVENT_BUS_HOST=selenium-hub
+    - SE_EVENT_BUS_PUBLISH_PORT=4442
+    - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
     restart: always
 
   # artifactory:
